@@ -142,15 +142,35 @@ const createSalon = asyncHandler(async (req, res) => {
     DEFAULT_SERVICES.map((service) => ({ ...service, salonId: salon._id })),
   );
 
-  // One bookable staff member so appointments can be created immediately after
-  // a plan is assigned and a client is added.
-  await Staff.create({
+  // Bookable staff + login so they can use the mobile app (check-in) as a receptionist.
+  const defaultStaffName = `${salon.name}'s Default Stylist`;
+  const defaultStaffEmail = `stylist-${salon._id}@salon.test`;
+  const defaultStaffPassword = "Password@123";
+
+  const stylistUser = await User.create({
+    name: defaultStaffName,
+    email: defaultStaffEmail,
+    passwordHash: await User.hashPassword(defaultStaffPassword),
+    role: ROLES.RECEPTIONIST,
     salonId: salon._id,
-    name: `${salon.name}'s Default Stylist`,
-    specialization: "General",
   });
 
-  res.status(201).json({ salon: serialiseSalon(salon) });
+  await Staff.create({
+    salonId: salon._id,
+    name: defaultStaffName,
+    specialization: "General",
+    userId: stylistUser._id,
+  });
+
+  res.status(201).json({
+    salon: serialiseSalon(salon),
+    defaultStaffLogin: {
+      name: defaultStaffName,
+      email: defaultStaffEmail,
+      password: defaultStaffPassword,
+      role: ROLES.RECEPTIONIST,
+    },
+  });
 });
 
 module.exports = { listSalons, getSalon, createSalon, serialiseSalon };
