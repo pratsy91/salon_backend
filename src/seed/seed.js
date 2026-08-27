@@ -147,7 +147,7 @@ async function seed() {
     salonId: null,
   });
 
-  const [glowOwner, glowReception] = await User.create([
+  const [glowOwner, aishaUser, vikramUser, nehaUser] = await User.create([
     {
       name: "Meera Kapoor",
       email: "owner@glow.test",
@@ -156,8 +156,22 @@ async function seed() {
       salonId: glow._id,
     },
     {
-      name: "Riya Sharma",
+      name: "Aisha Khan",
       email: "reception@glow.test",
+      passwordHash,
+      role: ROLES.RECEPTIONIST,
+      salonId: glow._id,
+    },
+    {
+      name: "Vikram Rao",
+      email: "vikram@glow.test",
+      passwordHash,
+      role: ROLES.RECEPTIONIST,
+      salonId: glow._id,
+    },
+    {
+      name: "Neha Joshi",
+      email: "neha@glow.test",
       passwordHash,
       role: ROLES.RECEPTIONIST,
       salonId: glow._id,
@@ -223,10 +237,20 @@ async function seed() {
       salonId: glow._id,
       name: "Aisha Khan",
       specialization: "Hair",
-      userId: glowReception._id,
+      userId: aishaUser._id,
     },
-    { salonId: glow._id, name: "Vikram Rao", specialization: "Color" },
-    { salonId: glow._id, name: "Neha Joshi", specialization: "Skin" },
+    {
+      salonId: glow._id,
+      name: "Vikram Rao",
+      specialization: "Color",
+      userId: vikramUser._id,
+    },
+    {
+      salonId: glow._id,
+      name: "Neha Joshi",
+      specialization: "Skin",
+      userId: nehaUser._id,
+    },
   ]);
 
   await Staff.create([
@@ -293,7 +317,17 @@ async function seed() {
     {
       role: "RECEPTIONIST",
       email: "reception@glow.test",
-      salon: "Glow & Go (active plan)",
+      salon: "Glow · Aisha Khan",
+    },
+    {
+      role: "RECEPTIONIST",
+      email: "vikram@glow.test",
+      salon: "Glow · Vikram Rao",
+    },
+    {
+      role: "RECEPTIONIST",
+      email: "neha@glow.test",
+      salon: "Glow · Neha Joshi",
     },
     {
       role: "SALON_OWNER",

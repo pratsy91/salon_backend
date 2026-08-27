@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Salon = require("../models/Salon");
 const User = require("../models/User");
 const Service = require("../models/Service");
+const Staff = require("../models/Staff");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const {
@@ -140,6 +141,14 @@ const createSalon = asyncHandler(async (req, res) => {
   await Service.insertMany(
     DEFAULT_SERVICES.map((service) => ({ ...service, salonId: salon._id })),
   );
+
+  // One bookable staff member so appointments can be created immediately after
+  // a plan is assigned and a client is added.
+  await Staff.create({
+    salonId: salon._id,
+    name: `${salon.name}'s Default Stylist`,
+    specialization: "General",
+  });
 
   res.status(201).json({ salon: serialiseSalon(salon) });
 });
