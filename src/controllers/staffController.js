@@ -26,7 +26,7 @@ const createStaff = asyncHandler(async (req, res) => {
     if (activeCount >= plan.maxStaff) {
       throw ApiError.forbidden(
         "PLAN_LIMIT_REACHED",
-        `Your ${plan.name} plan allows ${plan.maxStaff} staff members. Upgrade the plan to add more.`,
+        `Your ${plan.name} plan allows ${plan.maxStaff} staff members. Upgrade plan to add more.`,
       );
     }
   }
