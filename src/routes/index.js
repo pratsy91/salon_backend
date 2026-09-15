@@ -23,7 +23,7 @@ const SALON_USERS = [ROLES.SALON_OWNER, ROLES.RECEPTIONIST];
 
 router.get('/health', (req, res) => res.json({ status: 'ok' }));
 
-/* ---------------------------------- auth --------------------------------- */
+/* ---------------------------------- auth- --------------------------------- */
 router.post('/auth/login', authController.login);
 router.get('/auth/me', authenticate, authController.me);
 
