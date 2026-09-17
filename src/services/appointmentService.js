@@ -9,7 +9,7 @@ const {
   toMinutes,
   toTimeString,
   isValidDateString,
-  zonedNow,
+  todayDateString,
 } = require("../utils/time");
 const {
   BLOCKING_STATUSES,
@@ -146,8 +146,7 @@ async function createAppointment({ salon, payload, userId }) {
       "'date' must be a real calendar date in YYYY-MM-DD format.",
     );
   }
-  const { date: today, minutes: nowMinutes } = zonedNow();
-  if (date < today) {
+  if (date < todayDateString()) {
     throw ApiError.badRequest(
       "DATE_IN_PAST",
       "Appointments cannot be booked for a past date.",
@@ -169,13 +168,6 @@ async function createAppointment({ salon, payload, userId }) {
     service,
     salon,
   );
-
-  if (date === today && startMinutes < nowMinutes) {
-    throw ApiError.badRequest(
-      "TIME_IN_PAST",
-      `Cannot book ${toTimeString(startMinutes)} because that time has already passed today.`,
-    );
-  }
 
   await assertPlanAppointmentQuota(salon);
 
